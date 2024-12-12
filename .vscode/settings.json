@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "*.md": "markdown",
+        "*.bits": "code-text-binary",
+        "string": "c",
+        "string_view": "c",
+        "stdio.h": "c",
+        "stdlib.h": "c"
+    }
+}
