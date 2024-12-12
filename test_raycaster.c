@@ -31,7 +31,7 @@ typedef struct {
  * uninitialized.
  */
 RaycastTest* make_test(const char* input_image, const char* expected_image,
-                       const char* filename, int light_count) {
+    const char* filename, int light_count) {
     RaycastTest* test = malloc(sizeof(RaycastTest));
     test->image = read_image(input_image);
     test->lights = malloc(sizeof(Light) * light_count);
@@ -93,7 +93,7 @@ char image_almost_equal(RaycastTest* info, int test, Image* actual, const char* 
         expected->width != actual->width) {
         printf("Test %d: ", test);
         printf("expected an image of size %dx%d, ", expected->width,
-               expected->height);
+            expected->height);
         printf("got an image of size %dx%d", actual->width, actual->height);
         return 1;
     }
@@ -112,7 +112,7 @@ char image_almost_equal(RaycastTest* info, int test, Image* actual, const char* 
     // equal
     if (mismatch_count * 10 > pixel_count) {
         printf("Test %d failed: %ld/%ld pixels differ\n", test, mismatch_count,
-               pixel_count);
+            pixel_count);
         printf("  expected: %s\n", info->expected_filename);
         printf("  actual:   %s\n", actual_path);
         return 1;
@@ -128,8 +128,8 @@ char image_almost_equal(RaycastTest* info, int test, Image* actual, const char* 
 RaycastTest* test_tiny(void) {
     RaycastTest* result =
         make_test("images/tiny.png", "images/test_references/tiny_test.png",
-                  "tiny_test", 1);
-    result->lights[0] = (Light){WHITE, 50.0, (PixelLocation){8, 2}};
+            "tiny_test", 1);
+    result->lights[0] = (Light){ WHITE, 50.0, (PixelLocation) { 8, 2 } };
     return result;
 }
 
@@ -139,8 +139,8 @@ RaycastTest* test_tiny(void) {
 RaycastTest* test_small(void) {
     RaycastTest* result =
         make_test("images/small.png", "images/test_references/small_test.png",
-                  "small_test", 1);
-    result->lights[0] = (Light){YELLOW, 400.0, (PixelLocation){1, 30}};
+            "small_test", 1);
+    result->lights[0] = (Light){ YELLOW, 400.0, (PixelLocation) { 1, 30 } };
     return result;
 }
 
@@ -151,8 +151,8 @@ RaycastTest* test_small_2_light(void) {
     RaycastTest* result = make_test(
         "images/small.png", "images/test_references/small_test_2_light.png",
         "small_test_2_light", 2);
-    result->lights[0] = (Light){BLUE, 200.0, (PixelLocation){30, 2}};
-    result->lights[1] = (Light){MAGENTA, 300.0, (PixelLocation){15, 20}};
+    result->lights[0] = (Light){ BLUE, 200.0, (PixelLocation) { 30, 2 } };
+    result->lights[1] = (Light){ MAGENTA, 300.0, (PixelLocation) { 15, 20 } };
     return result;
 }
 
@@ -163,10 +163,10 @@ RaycastTest* test_small_4_light(void) {
     RaycastTest* result = make_test(
         "images/small.png", "images/test_references/small_test_4_light.png",
         "small_test_4_light", 4);
-    result->lights[0] = (Light){WHITE, 100.0, (PixelLocation){1, 12}};
-    result->lights[1] = (Light){BLUE, 50.0, (PixelLocation){30, 30}};
-    result->lights[2] = (Light){YELLOW, 400.0, (PixelLocation){8, 28}};
-    result->lights[3] = (Light){MAGENTA, 200.0, (PixelLocation){27, 4}};
+    result->lights[0] = (Light){ WHITE, 100.0, (PixelLocation) { 1, 12 } };
+    result->lights[1] = (Light){ BLUE, 50.0, (PixelLocation) { 30, 30 } };
+    result->lights[2] = (Light){ YELLOW, 400.0, (PixelLocation) { 8, 28 } };
+    result->lights[3] = (Light){ MAGENTA, 200.0, (PixelLocation) { 27, 4 } };
     return result;
 }
 
@@ -176,13 +176,74 @@ RaycastTest* test_small_4_light(void) {
 RaycastTest* test_long(void) {
     RaycastTest* result =
         make_test("images/long.png", "images/test_references/long_test.png",
-                  "long_test", 4);
-    result->lights[0] = (Light){YELLOW, 7000.0, (PixelLocation){100, 12}};
-    result->lights[1] = (Light){MAGENTA, 4000.0, (PixelLocation){50, 30}};
-    result->lights[2] = (Light){YELLOW, 5000.0, (PixelLocation){8, 70}};
-    result->lights[3] = (Light){MAGENTA, 5000.0, (PixelLocation){170, 90}};
+            "long_test", 4);
+    result->lights[0] = (Light){ YELLOW, 7000.0, (PixelLocation) { 100, 12 } };
+    result->lights[1] = (Light){ MAGENTA, 4000.0, (PixelLocation) { 50, 30 } };
+    result->lights[2] = (Light){ YELLOW, 5000.0, (PixelLocation) { 8, 70 } };
+    result->lights[3] = (Light){ MAGENTA, 5000.0, (PixelLocation) { 170, 90 } };
     return result;
 }
+
+/*
+MY TEST CASES
+*/
+
+// single pixel 
+
+RaycastTest* test_single_pixel(void) {
+    RaycastTest* result = make_test("images/single_pixel.png",
+        "images/test_references/single_pixel_test.png",
+        "single_pixel_test",
+        1);
+    result->lights[0] = (Light){ (Color) { 255, 255, 255 }, 100.0, (PixelLocation) { 0, 0 } };
+    return result;
+}
+
+// single pixel with obstacle
+RaycastTest* test_single_pixel_obstacle(void) {
+    RaycastTest* result = make_test("images/single_pixel_obstacle.png",
+        "images/test_references/single_pixel_obstacle_test.png",
+        "single_pixel_obstacle_test",
+        1);
+    result->lights[0] = (Light){ (Color) { 255, 255, 255 }, 100.0, (PixelLocation) { 0, 0 } };
+    return result;
+}
+
+// Image with no lights 
+RaycastTest* test_no_lights(void) {
+    RaycastTest* result = make_test("images/small.png",
+        "images/test_references/small_test_dark.png",
+        "no_lights",
+        0);
+    return result;
+}
+
+// cool lights, 4 lights 
+RaycastTest* test_cool_lights(void) {
+    RaycastTest* result = make_test("images/large_empty.png",
+        "images/test_references/cool_lights_test.png",
+        "cool_shape",
+        4);
+    result->lights[0] = (Light){ (Color) { 255, 0, 0 }, 100.0, (PixelLocation) { 0, 0 } };
+    result->lights[1] = (Light){ (Color) { 0, 0, 255 }, 100.0, (PixelLocation) { 32, 32 } };
+    result->lights[2] = (Light){ (Color) { 0, 255, 0 }, 100.0, (PixelLocation) { 128, 128 } };
+    result->lights[3] = (Light){ (Color) { 255, 255, 255 }, 100.0, (PixelLocation) { 300, 300 } };
+    return result;
+}
+
+// another cool shape 
+RaycastTest* test_cool_shape(void) {
+    RaycastTest* result = make_test("timingimgs/simplicity2.png",
+        "images/test_references/simplicty2_output.png",
+        "cool_shape",
+        4);
+    result->lights[0] = (Light){ (Color) { 255, 0, 0 }, 100.0, (PixelLocation) { 0, 0 } };
+    result->lights[1] = (Light){ (Color) { 0, 0, 255 }, 100.0, (PixelLocation) { 32, 32 } };
+    result->lights[2] = (Light){ (Color) { 0, 255, 0 }, 100.0, (PixelLocation) { 128, 128 } };
+    result->lights[3] = (Light){ (Color) { 255, 255, 255 }, 100.0, (PixelLocation) { 300, 300 } };
+    return result;
+}
+
 
 // Tests
 
@@ -195,7 +256,7 @@ char raycast_sequential_check(int test, RaycastTest* info) {
 
     char out_name[64];
     snprintf(out_name, 64, "images/sequential_results/%s.png",
-             info->out_filename);
+        info->out_filename);
     char error = image_almost_equal(info, test, out, out_name);
     write_image(out_name, out);
     free_image(out);
@@ -219,6 +280,12 @@ int test_raycast_sequential(void) {
     errors += raycast_sequential_check(2, test_small_2_light());
     errors += raycast_sequential_check(3, test_small_4_light());
     errors += raycast_sequential_check(4, test_long());
+
+    errors += raycast_sequential_check(5, test_single_pixel());
+    errors += raycast_sequential_check(6, test_single_pixel_obstacle());
+    errors += raycast_sequential_check(7, test_no_lights());
+    errors += raycast_sequential_check(8, test_cool_lights());
+    errors += raycast_sequential_check(9, test_cool_shape());
     return errors;
 }
 
@@ -227,13 +294,13 @@ int test_raycast_sequential(void) {
  * Also writes each case to the give result file
  */
 char raycast_parallel_light_check(int test, RaycastTest* info,
-                                  int thread_count) {
+    int thread_count) {
     Image* out = raycast_parallel_lights(info->image, info->lights, info->light_count,
-                                         thread_count);
+        thread_count);
 
     char out_name[64];
     snprintf(out_name, 64, "images/parallel_light_results/%s.png",
-             info->out_filename);
+        info->out_filename);
     char error = image_almost_equal(info, test, out, out_name);
     write_image(out_name, out);
     free_image(out);
@@ -259,6 +326,13 @@ int test_raycast_parallel_light(void) {
     errors += raycast_parallel_light_check(4, test_small_4_light(), 4);
     errors += raycast_parallel_light_check(5, test_small_4_light(), 2);
     errors += raycast_parallel_light_check(6, test_long(), 4);
+
+    errors += raycast_parallel_light_check(7, test_single_pixel(), 1);
+    errors += raycast_parallel_light_check(8, test_single_pixel_obstacle(), 1);
+    errors += raycast_parallel_light_check(9, test_no_lights(), 1);
+    errors += raycast_parallel_light_check(10, test_cool_lights(), 4);
+    errors += raycast_parallel_light_check(11, test_cool_shape(), 4);
+
     return errors;
 }
 
@@ -268,11 +342,11 @@ int test_raycast_parallel_light(void) {
  */
 char raycast_parallel_row_check(int test, RaycastTest* info, int thread_count) {
     Image* out = raycast_parallel_rows(info->image, info->lights, info->light_count,
-                                       thread_count);
+        thread_count);
 
     char out_name[64];
     snprintf(out_name, 64, "images/parallel_row_results/%s.png",
-             info->out_filename);
+        info->out_filename);
     char error = image_almost_equal(info, test, out, out_name);
     write_image(out_name, out);
     free_image(out);
@@ -298,6 +372,13 @@ int test_raycast_parallel_row(void) {
     errors += raycast_parallel_row_check(4, test_small_4_light(), 4);
     errors += raycast_parallel_row_check(5, test_small_4_light(), 2);
     errors += raycast_parallel_row_check(6, test_long(), 6);
+
+    errors += raycast_parallel_row_check(7, test_single_pixel(), 1);
+    errors += raycast_parallel_row_check(8, test_single_pixel_obstacle(), 1);
+    errors += raycast_parallel_row_check(9, test_no_lights(), 1);
+    errors += raycast_parallel_row_check(10, test_cool_lights(), 4);
+    errors += raycast_parallel_row_check(11, test_cool_shape(), 4);
+
     return errors;
 }
 
@@ -310,7 +391,8 @@ int main(void) {
     errors = test_raycast_sequential();
     if (errors == 0) {
         printf("all tests passed\n");
-    } else {
+    }
+    else {
         printf("failed %d tests\n", errors);
     }
 
@@ -319,7 +401,8 @@ int main(void) {
     errors = test_raycast_parallel_light();
     if (errors == 0) {
         printf("all tests passed\n");
-    } else {
+    }
+    else {
         printf("failed %d tests\n", errors);
     }
 
@@ -328,7 +411,8 @@ int main(void) {
     errors = test_raycast_parallel_row();
     if (errors == 0) {
         printf("all tests passed\n");
-    } else {
+    }
+    else {
         printf("failed %d tests\n", errors);
     }
 }

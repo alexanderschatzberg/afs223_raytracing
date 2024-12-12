@@ -1,29 +1,25 @@
 #include <stdio.h>
-
+#include <stdlib.h>
 #include "image.h"
 #include "raycaster.h"
-
-// Constants to help with trying stuff out
-#define WHITE (Color){255, 255, 255}
-#define RED (Color){255, 0, 0}
-#define GREEN (Color){0, 255, 0}
-#define BLUE (Color){0, 0, 255}
+#include "raycaster_util.h"
 
 int main(void) {
-    Image* image = read_image("images/tiny.png");
-    printf("Image size: %d %d\n", image->width, image->height);
+    // Scene setup identical to test_cool_lights
+    Image* scene = read_image("images/large_empty.png");
+    Light lights[4];
+    lights[0] = (Light){ (Color) { 255, 0, 0 }, 100.0, (PixelLocation) { 0, 0 } };
+    lights[1] = (Light){ (Color) { 0, 0, 255 }, 100.0, (PixelLocation) { 32, 32 } };
+    lights[2] = (Light){ (Color) { 0, 255, 0 }, 100.0, (PixelLocation) { 128, 128 } };
+    lights[3] = (Light){ (Color) { 255, 255, 255 }, 100.0, (PixelLocation) { 300, 300 } };
 
-    PixelLocation loc = (PixelLocation){5, 5};
-    Light light = (Light){WHITE, 70000.0, loc};
+    int light_count = 4;
 
-    Light lights[] = {light};
-    Image* out = raycast_sequential(image, lights, 1);
+    Image* output = raycast_sequential(scene, lights, light_count);
+    write_image("images/test_references/cool_lights_test.png", output);
 
-    write_image("raycast.png", out);
-    free_image(image);
-    free_image(out);
-
-    printf("Finished\n");
+    free_image(scene);
+    free_image(output);
 
     return 0;
 }
